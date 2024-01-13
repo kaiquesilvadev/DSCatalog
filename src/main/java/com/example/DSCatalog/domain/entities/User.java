@@ -9,17 +9,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_category")
-public class Category {
+@Table(name = "tb_user")
+public class User {
 
 	@Id
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+	private String FirstName;
+	private String vlastName;
+	private String email;
+	private String password;
 }
