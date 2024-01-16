@@ -1,7 +1,10 @@
 package com.example.DSCatalog.domain.entities;
 
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,10 +31,13 @@ public class User {
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String FirstName;
+	private String firstName;
 	private String vlastName;
 	private String email;
 	private String password;
+	
+	@CreationTimestamp
+	private OffsetDateTime dataCadastro;
 
 	@ManyToMany
 	@JoinTable(name = "tb_user_role" ,

@@ -3,6 +3,7 @@ package com.example.DSCatalog.domain.dto.conversor;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.DSCatalog.domain.dto.request.ProductRequest;
@@ -11,7 +12,8 @@ import com.example.DSCatalog.domain.entities.Product;
 
 @Component
 public class ProductConversor {
-
+	
+	@Autowired
 	private ModelMapper mapper;
 
 	public Product converteDto(ProductRequest dto) {
