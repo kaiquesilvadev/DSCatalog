@@ -3,6 +3,9 @@ package com.example.DSCatalog.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,9 @@ import org.springframework.web.service.annotation.PutExchange;
 import com.example.DSCatalog.domain.dto.conversor.CategoryConversor;
 import com.example.DSCatalog.domain.dto.request.CategoryRequest;
 import com.example.DSCatalog.domain.dto.responce.CategoryResponce;
+import com.example.DSCatalog.domain.dto.responce.UserResponce;
+import com.example.DSCatalog.domain.entities.Category;
+import com.example.DSCatalog.domain.entities.User;
 import com.example.DSCatalog.domain.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -32,8 +38,10 @@ public class CategoryController {
 	private CategoryConversor conversor;
 
 	@GetMapping
-	public List<CategoryResponce> lista() {
-		return conversor.converteLista(service.lista());
+	public Page<CategoryResponce> lista(Pageable pageable) {
+		Page<Category> page = service.lista(pageable);
+		List<CategoryResponce> listDto = conversor.converteLista(page.getContent());
+		return new PageImpl<CategoryResponce>(listDto, pageable, page.getTotalElements());
 	}
 
 	@GetMapping("/{id}")
@@ -51,7 +59,7 @@ public class CategoryController {
 	public CategoryResponce atualizar(@PathVariable Long id, @Valid @RequestBody CategoryRequest dto) {
 		return conversor.converteEntidade(service.atualiza(id, dto));
 	}
-	
+
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void deletar(@PathVariable Long id) {
