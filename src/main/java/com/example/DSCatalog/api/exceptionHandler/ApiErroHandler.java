@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.DSCatalog.domain.exception.CategoryNaoEncontradaException;
+import com.example.DSCatalog.domain.exception.EntidadeEmUsoException;
 import com.example.DSCatalog.domain.exception.EntidadeNaoEncontradaException;
 
 @ControllerAdvice
@@ -41,6 +42,18 @@ public class ApiErroHandler extends ResponseEntityExceptionHandler {
 				.path(PathErro.ENTIDADE_NAO_ENCONTRADA.getUrl()).build();
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+
+	}
+	
+	@ExceptionHandler(EntidadeEmUsoException.class)
+	public ResponseEntity<?> trataEntidadeEmUsoException(EntidadeEmUsoException ex, HttpHeaders headers,
+			HttpStatusCode statusCode, WebRequest request) {
+
+		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.CONFLICT.value())
+				.message(ex.getMessage()).erro(PathErro.ENTIDADE_EM_USO.getTitle())
+				.path(PathErro.ENTIDADE_EM_USO.getUrl()).build();
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.CONFLICT, request);
 
 	}
 
