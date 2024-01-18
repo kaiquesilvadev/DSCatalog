@@ -48,7 +48,7 @@ public class CategoryService {
 
 		Category entidade = buscaPorId(id);
 		conversor.copia(dto, entidade);
-		return entidade;
+		return repository.save(entidade);
 	}
 
 	@Transactional(propagation = Propagation.SUPPORTS)

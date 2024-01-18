@@ -41,13 +41,13 @@ public class ProductService {
 		return repository.save(entidade);
 	}
 
-	@Transactional(propagation = Propagation.SUPPORTS)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Product atualiza(Long id, ProductRequest dto) {
 
 		Product entidade = buscaPorId(id);
+		entidade.getCategories();
 		conversor.copia(dto, entidade);
-		return entidade;
-	}
+		return repository.save(entidade);	}
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void deleta(Long id) {

@@ -46,8 +46,7 @@ public class UserService {
 
 		User entidade = buscaPorId(id);
 		conversor.copia(dto, entidade);
-		return entidade;
-	}
+		return repository.save(entidade);	}
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void deleta(Long id) {

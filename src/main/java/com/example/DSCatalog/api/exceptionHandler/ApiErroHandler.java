@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.DSCatalog.domain.exception.CategoryNaoEncontradaException;
 import com.example.DSCatalog.domain.exception.EntidadeEmUsoException;
 import com.example.DSCatalog.domain.exception.EntidadeNaoEncontradaException;
+import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
+import com.example.DSCatalog.domain.exception.UserNaoEncontradoException;
 
 @ControllerAdvice
 public class ApiErroHandler extends ResponseEntityExceptionHandler {
@@ -59,6 +61,26 @@ public class ApiErroHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(CategoryNaoEncontradaException.class)
 	public ResponseEntity<?> trataCategoryNaoEncontradaException(CategoryNaoEncontradaException ex, WebRequest request) {
+
+		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.NOT_FOUND.value())
+				.message(ex.getMessage()).erro(PathErro.ENTIDADE_NAO_ENCONTRADA.getTitle())
+				.path(PathErro.ENTIDADE_NAO_ENCONTRADA.getUrl()).build();
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler(ProductNaoEncontradoException.class)
+	public ResponseEntity<?> trataProductNaoEncontradoException(ProductNaoEncontradoException ex, WebRequest request) {
+
+		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.NOT_FOUND.value())
+				.message(ex.getMessage()).erro(PathErro.ENTIDADE_NAO_ENCONTRADA.getTitle())
+				.path(PathErro.ENTIDADE_NAO_ENCONTRADA.getUrl()).build();
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler(UserNaoEncontradoException.class)
+	public ResponseEntity<?> trataUserNaoEncontradoException(UserNaoEncontradoException ex, WebRequest request) {
 
 		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.NOT_FOUND.value())
 				.message(ex.getMessage()).erro(PathErro.ENTIDADE_NAO_ENCONTRADA.getTitle())

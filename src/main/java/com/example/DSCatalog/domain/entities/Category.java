@@ -4,6 +4,8 @@ import java.time.OffsetDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.example.DSCatalog.domain.dto.referencias.CategoryRef;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +25,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_category")
 public class Category {
 
+	
+
 	@Id
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +35,8 @@ public class Category {
 	
 	@CreationTimestamp
 	private OffsetDateTime createdAt;
+	
+	public Category(CategoryRef categoryId) {
+		this.id = categoryId.getId();
+	}
 }

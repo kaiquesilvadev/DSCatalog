@@ -8,6 +8,6 @@ public class ProductNaoEncontradoException extends RuntimeException{
 	}
 	
 	public ProductNaoEncontradoException(Long id) {
-		this("'ID' de product com código " + id + " não encontrado");
+		this("'ID' de product com código " + id + " não foi encontrado");
 	}
 }
