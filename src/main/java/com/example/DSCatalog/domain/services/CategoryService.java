@@ -61,5 +61,12 @@ public class CategoryService {
 			throw new EntidadeEmUsoException(id);
 		}
 	}
+	
+	public void testaSeIdENulo() {
+		
+		
+		
+		repository.deleteById(null);
+	}
 
 }
