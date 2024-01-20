@@ -1,6 +1,7 @@
 package com.example.DSCatalog.domain.services;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.DSCatalog.domain.entities.Product;
+import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
 import com.example.DSCatalog.domain.repositories.ProductRepository;
 
 @ExtendWith(SpringExtension.class)
@@ -41,6 +43,8 @@ public class ProductServiceTest {
 		// Quando o método deleteById do mock repository for chamado com o argumento idExistente,
 		// não faça nada (doNothing), pois é um método void (não retorna valor).
 		Mockito.doNothing().when(repository).deleteById(idExistente);
+		
+		when(repository.findById(idInexistente)).thenThrow(new ProductNaoEncontradoException(idExistente));
 	}
 	
 	@Test
@@ -55,6 +59,14 @@ public class ProductServiceTest {
 		
 		// Verifica se o método findById foi chamado exatamente 1 vez com o argumento idExistente.
 		Mockito.verify(repository ,Mockito.times(1)).findById(idExistente);
+	}
+	
+	@Test
+	@DisplayName("testa se retorna uma exception se passar um id inexistente em delete")
+	public void testaSeRetornaUmaExceptionQuandoPassadoUmIdInexistente() {
 
+		assertThrows(ProductNaoEncontradoException.class, () -> {
+			service.deleta(idInexistente);
+		});
 	}
 }
