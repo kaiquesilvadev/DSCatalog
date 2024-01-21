@@ -12,7 +12,7 @@ public class CriaProduct {
 
 	public static Product objCriado() {
 
-		Product product = new Product(null, "PC Gamer asus", "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
+		Product product = new Product(1L , "PC Gamer asus", "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
 				300.50,
 				"https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/7-big.jpg",
 				OffsetDateTime.now(), new ArrayList<>());
@@ -25,6 +25,7 @@ public class CriaProduct {
 	public static ProductResponce convertProduc(Product product) {
 		ProductResponce responce = new ProductResponce();
 
+		responce.setId(product.getId());
 		responce.setName(product.getName());
 		responce.setDescription(product.getDescription());
 		responce.setImgUrl(product.getImgUrl());
