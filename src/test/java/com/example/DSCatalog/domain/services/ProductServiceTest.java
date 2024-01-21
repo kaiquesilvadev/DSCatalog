@@ -49,6 +49,7 @@ public class ProductServiceTest {
 		// Quando o método deleteById do mock repository for chamado com o argumento idExistente,
 		// não faça nada (doNothing), pois é um método void (não retorna valor).
 		doNothing().when(repository).deleteById(idAssociado);
+		
 		Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(idAssociado);
 
 		when(repository.findById(idInexistente)).thenThrow(new ProductNaoEncontradoException(idInexistente));
