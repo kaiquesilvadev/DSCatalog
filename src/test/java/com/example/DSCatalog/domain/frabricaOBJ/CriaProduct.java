@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.DSCatalog.domain.dto.request.ProductRequest;
 import com.example.DSCatalog.domain.dto.responce.ProductResponce;
 import com.example.DSCatalog.domain.entities.Category;
 import com.example.DSCatalog.domain.entities.Product;
@@ -25,7 +26,7 @@ public class CriaProduct {
 	public static ProductResponce convertProduc(Product product) {
 		ProductResponce responce = new ProductResponce();
 
-		responce.setId(product.getId());
+		responce.setId(1L);
 		responce.setName(product.getName());
 		responce.setDescription(product.getDescription());
 		responce.setImgUrl(product.getImgUrl());
@@ -35,6 +36,20 @@ public class CriaProduct {
 		});
 
 		return responce;
+	}
+	
+	public static ProductRequest convertParaRequest(Product product) {
+		ProductRequest request = new ProductRequest();
+
+		request.setName(product.getName());
+		request.setDescription(product.getDescription());
+		request.setImgUrl(product.getImgUrl());
+		request.setPrice(product.getPrice());
+		product.getCategories().forEach(cat -> {
+			request.getCategories().add(CriaCategory.convertCatParaRequest(cat));
+		});
+
+		return request;
 	}
 
 	public static List<ProductResponce> convertLista(List<Product> list) {

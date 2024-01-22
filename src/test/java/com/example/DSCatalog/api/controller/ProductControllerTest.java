@@ -1,7 +1,10 @@
 package com.example.DSCatalog.api.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,6 +25,7 @@ import com.example.DSCatalog.domain.entities.Product;
 import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
 import com.example.DSCatalog.domain.frabricaOBJ.CriaProduct;
 import com.example.DSCatalog.domain.services.ProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 //Anotação utilizada para testes específicos do controlador (controller) ProductController.
 //Esta anotação configura um contexto de teste do Spring MVC, focando apenas no controlador
@@ -34,6 +38,9 @@ public class ProductControllerTest {
 
 	@MockBean
 	private ProductConversor conversor;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@MockBean
 	private ProductService service;
@@ -59,6 +66,9 @@ public class ProductControllerTest {
 		//mock BuscaPorId
 		when(service.buscaPorId(idExistente)).thenReturn(CriaProduct.objCriado());	
 		when(service.buscaPorId(idInexistente)).thenThrow(new ProductNaoEncontradoException(idInexistente));
+		
+		when(service.atualiza(eq(idExistente), any())).thenReturn(CriaProduct.objCriado());	
+		when(service.atualiza(eq(idInexistente), any())).thenThrow(new ProductNaoEncontradoException(idInexistente));
 	}
 
 	@Test
@@ -86,6 +96,32 @@ public class ProductControllerTest {
 		// Realiza uma requisição GET para o endpoint "/products/{id}" com um ID inexistente.
 		// O método perform() inicia a execução da requisição e aceita um MediaType JSON.
 		// O valor do ID (idInexistente) é passado como um parâmetro na URL.
-		mockMvc.perform(get("/products/{id}" , idInexistente ).accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+		mockMvc.perform(get("/products/{id}" , idInexistente )
+				.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	@DisplayName("testa se retirna 404 condo o id d atualização for passado errado")
+	public void testaSeRetornaCodigo404quandotentarAtualizar() throws Exception {
+		String body = objectMapper.writeValueAsString(CriaProduct.convertParaRequest(entity));
+		
+		mockMvc.perform(put("/products/{id}" , idInexistente )
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	@DisplayName("testa se retirna 200 condo o id d atualização for passado serto")
+	public void testaSeRetornaCodigoOKquandotentarAtualizar() throws Exception {
+		String body = objectMapper.writeValueAsString(CriaProduct.convertParaRequest(entity));
+		
+		mockMvc.perform(put("/products/{id}" , idExistente )
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk());
 	}
 }
