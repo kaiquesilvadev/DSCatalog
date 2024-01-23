@@ -8,10 +8,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
 import com.example.DSCatalog.domain.repositories.ProductRepository;
 
+//@SpringBootTest: Inicializa a aplicação Spring Boot para testes integrados, simulando o ambiente de produção.
+//@Transactional: Garante atomicidade nas transações do banco de dados durante os testes, revertendo as mudanças ao final de cada teste.
 @SpringBootTest
 public class ProductServiceIT {
 
@@ -50,4 +53,5 @@ public class ProductServiceIT {
 			service.deleta(idInexistente);
 		});
 	}
+	
 }

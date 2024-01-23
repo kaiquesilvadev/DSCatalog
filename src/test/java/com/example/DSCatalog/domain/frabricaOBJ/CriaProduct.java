@@ -11,6 +11,18 @@ import com.example.DSCatalog.domain.entities.Product;
 
 public class CriaProduct {
 
+	public static Product testeSalva() {
+
+		Product product = new Product(null , "PC Gamer asus", "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
+				300.50,
+				"https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/7-big.jpg",
+				OffsetDateTime.now(), new ArrayList<>());
+
+		product.getCategories().add(new Category(2L, "Eletrônicos", OffsetDateTime.now()));
+
+		return product;
+	}
+	
 	public static Product objCriado() {
 
 		Product product = new Product(1L , "PC Gamer asus", "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",

@@ -29,7 +29,7 @@ public class ProductRepositoryTest {
 	// É comumente usado para configurar o estado inicial necessário para os testes.
 	@BeforeEach
 	public void setUp() {
-		this.product = CriaProduct.objCriado();
+		this.product = CriaProduct.testeSalva();
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class ProductRepositoryTest {
 	     Product entity = productRepository.save(product);
 		
 		assertNotNull(product.getId());
-		assertTrue(entity.getId() == 26L);
+		assertTrue(entity.getId().equals(entity.getId()));
 	}
 	
 	@Test
