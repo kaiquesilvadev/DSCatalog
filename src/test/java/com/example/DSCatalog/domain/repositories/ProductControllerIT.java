@@ -6,22 +6,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.DSCatalog.domain.frabricaOBJ.CriaProduct;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
+//Anotação indicando que este é um teste de integração e será executado em um ambiente real com uma porta aleatória.
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+
+//Anotação que configura o ciclo de vida da instância de teste para ser reutilizada para todos os métodos de teste na classe.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 public class ProductControllerIT {
 
 	@LocalServerPort
 	private int porta;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@BeforeEach
 	public void setUp() {
@@ -46,5 +57,39 @@ public class ProductControllerIT {
 						.path("size()"); // Extrai o tamanho da resposta JSON
 					
 		assertEquals(25 , totalAtual);
+	}
+	
+	@Test
+	@DisplayName("testa se atualiza um id existente")
+	public void testaSeOCodigoDeatualizacaoEO200() throws JsonProcessingException {
+		
+		String atualiza = objectMapper.writeValueAsString(CriaProduct.ObtParaAtualizar());
+
+		RestAssured.given()
+			.accept(ContentType.JSON)
+			.pathParam("id", 2)
+			.body(atualiza)// prepara um corpo para o request
+			.contentType(ContentType.JSON)
+		.when()
+			.put("{id}")
+		.then().statusCode(HttpStatus.OK.value())
+		;
+	}
+	
+	@Test
+	@DisplayName("testa se retorna o 404 quando o id for inexistente")
+	public void testaSeOCodigoDeAtualizacaoEO404QuandoPassarUmIdInexistente() throws JsonProcessingException {
+		
+		String atualiza = objectMapper.writeValueAsString(CriaProduct.ObtParaAtualizar());// crai um json com base no obj
+
+		RestAssured.given()
+			.accept(ContentType.JSON)
+			.pathParam("id", 20000)
+			.body(atualiza)// prepara um corpo para o request
+			.contentType(ContentType.JSON)
+		.when()
+			.put("{id}")
+		.then().statusCode(HttpStatus.NOT_FOUND.value())
+		;
 	}
 }
