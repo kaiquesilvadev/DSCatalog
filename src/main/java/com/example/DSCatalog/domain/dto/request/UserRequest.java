@@ -12,7 +12,7 @@ public class UserRequest {
 	private String firstName;
 	
 	@NotBlank
-	private String vlastName;
+	private String lastName;
 	
 	@NotBlank
 	private String email;

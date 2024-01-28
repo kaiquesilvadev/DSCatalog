@@ -9,7 +9,7 @@ public class UserResponce {
 
 	private Long id;
 	private String FirstName;
-	private String vlastName;
+	private String lastName;
 	private String email;
 	private String password;
 }
