@@ -1,11 +1,14 @@
 package com.example.DSCatalog.domain.dto.request;
 
+import com.example.DSCatalog.domain.validacao.UserInsertValid;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
+@UserInsertValid
 public class UserRequest {
 
 	@NotBlank
@@ -13,8 +16,6 @@ public class UserRequest {
 	
 	@NotBlank
 	private String lastName;
-	
-	@NotBlank
 	private String email;
 	
 	@NotBlank

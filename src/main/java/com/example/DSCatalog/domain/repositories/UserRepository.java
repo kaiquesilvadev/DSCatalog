@@ -6,4 +6,5 @@ import com.example.DSCatalog.domain.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
+	public Boolean existsByEmail(String email);
 }
