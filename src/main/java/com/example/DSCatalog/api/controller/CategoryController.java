@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +21,7 @@ import org.springframework.web.service.annotation.PutExchange;
 import com.example.DSCatalog.domain.dto.conversor.CategoryConversor;
 import com.example.DSCatalog.domain.dto.request.CategoryRequest;
 import com.example.DSCatalog.domain.dto.responce.CategoryResponce;
-import com.example.DSCatalog.domain.dto.responce.UserResponce;
 import com.example.DSCatalog.domain.entities.Category;
-import com.example.DSCatalog.domain.entities.User;
 import com.example.DSCatalog.domain.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -49,17 +48,20 @@ public class CategoryController {
 		return conversor.converteEntidade(service.buscaPorId(id));
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public CategoryResponce salva(@Valid @RequestBody CategoryRequest dto) {
 		return conversor.converteEntidade(service.salvar(dto));
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutExchange("/{id}")
 	public CategoryResponce atualizar(@PathVariable Long id, @Valid @RequestBody CategoryRequest dto) {
 		return conversor.converteEntidade(service.atualiza(id, dto));
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void deletar(@PathVariable Long id) {
