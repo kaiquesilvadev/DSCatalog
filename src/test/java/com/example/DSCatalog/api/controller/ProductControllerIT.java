@@ -1,7 +1,10 @@
-package com.example.DSCatalog.domain.repositories;
+package com.example.DSCatalog.api.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.example.DSCatalog.domain.frabricaOBJ.CriaProduct;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,12 +16,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.DSCatalog.domain.frabricaOBJ.CriaProduct;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //Anotação indicando que este é um teste de integração e será executado em um ambiente real com uma porta aleatória.
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -70,10 +68,10 @@ public class ProductControllerIT {
 			.pathParam("id", 2)
 			.body(atualiza)// prepara um corpo para o request
 			.contentType(ContentType.JSON)
+			.header("NomeDoCabecalho", "ValorDoCabecalho") // Passando um cabeçalho
 		.when()
 			.put("{id}")
-		.then().statusCode(HttpStatus.OK.value())
-		;
+		.then().statusCode(HttpStatus.OK.value());
 	}
 	
 	@Test

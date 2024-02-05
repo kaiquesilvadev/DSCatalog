@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +25,8 @@ public class CategoryService {
 	private CategoryConversor conversor;
 
 	@Transactional(readOnly = true)
-	public Page<Category> lista(Pageable pageable) {
-		return repository.findAll(pageable);
+	public List<Category> lista() {
+		return repository.findAll();
 	}
 
 	@Transactional(readOnly = true)
@@ -61,12 +59,4 @@ public class CategoryService {
 			throw new EntidadeEmUsoException(id);
 		}
 	}
-	
-	public void testaSeIdENulo() {
-		
-		
-		
-		repository.deleteById(null);
-	}
-
 }

@@ -14,9 +14,13 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -55,12 +59,16 @@ public class ProductControllerTest {
 		idInexistente = 2L;
 		entity = CriaProduct.objCriado();
 		listProducts.add(entity);
-		
+		Page<Product> pageProducts = new PageImpl<>(listProducts);
+
+		// Criando um objeto Pageable para passar durante a simulação
+		Pageable pageable = Mockito.mock(Pageable.class);
+
 		//mock de lista
-		when(service.lista()).thenReturn(listProducts);
+		when(service.lista(pageable)).thenReturn(pageProducts);
 		
 		//Mokc conversor
-		when(conversor.converteEntidade(entity)).thenReturn(CriaProduct.convertProduc(entity));
+		when(conversor.converteEntidade(entity)).thenReturn(CriaProduct.convertProduct(entity));
 		when(conversor.converteLista(listProducts)).thenReturn(CriaProduct.convertLista(listProducts));
 		
 		//mock BuscaPorId

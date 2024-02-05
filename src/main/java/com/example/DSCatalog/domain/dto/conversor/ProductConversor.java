@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.DSCatalog.domain.dto.request.ProductRequest;
+import com.example.DSCatalog.domain.dto.responce.ProductMinResponce;
 import com.example.DSCatalog.domain.dto.responce.ProductResponce;
 import com.example.DSCatalog.domain.entities.Category;
 import com.example.DSCatalog.domain.entities.Product;
@@ -26,18 +27,20 @@ public class ProductConversor {
 		return mapper.map(entidade, ProductResponce.class);
 	}
 
+	public ProductMinResponce converteParaPage(Product entidade) {
+		return mapper.map(entidade, ProductMinResponce.class);
+	}
+
 	public void copia(ProductRequest dto, Product entidade) {
 
-		
 		entidade.getCategories().clear();
-		entidade.getCategories().addAll(dto.getCategories().stream()
-	            .map(categoryId -> new Category(categoryId))
-	            .collect(Collectors.toSet()));
-		
+		entidade.getCategories().addAll(
+				dto.getCategories().stream().map(categoryId -> new Category(categoryId)).collect(Collectors.toSet()));
+
 		mapper.map(dto, entidade);
 	}
 
-	public List<ProductResponce> converteLista(List<Product> lista) {
-		return lista.stream().map(cat -> converteEntidade(cat)).toList();
+	public List<ProductMinResponce> converteLista(List<Product> lista) {
+		return lista.stream().map(cat -> converteParaPage(cat)).toList();
 	}
 }

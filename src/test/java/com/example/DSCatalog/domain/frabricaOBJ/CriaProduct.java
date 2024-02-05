@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.DSCatalog.domain.dto.referencias.CategoryRef;
 import com.example.DSCatalog.domain.dto.request.ProductRequest;
+import com.example.DSCatalog.domain.dto.responce.ProductMinResponce;
 import com.example.DSCatalog.domain.dto.responce.ProductResponce;
 import com.example.DSCatalog.domain.entities.Category;
 import com.example.DSCatalog.domain.entities.Product;
@@ -51,7 +52,7 @@ public class CriaProduct {
 		return product;
 	}
 
-	public static ProductResponce convertProduc(Product product) {
+	public static ProductResponce convertProduct(Product product) {
 		ProductResponce responce = new ProductResponce();
 
 		responce.setId(1L);
@@ -62,6 +63,17 @@ public class CriaProduct {
 		product.getCategories().forEach(cat -> {
 			responce.getCategories().add(CriaCategory.convertCategory(cat));
 		});
+
+		return responce;
+	}
+	
+	public static ProductMinResponce convertProductMin(Product product) {
+		ProductMinResponce responce = new ProductMinResponce();
+
+		responce.setId(1L);
+		responce.setName(product.getName());
+		responce.setImgUrl(product.getImgUrl());
+		responce.setPrice(product.getPrice());
 
 		return responce;
 	}
@@ -80,7 +92,7 @@ public class CriaProduct {
 		return request;
 	}
 
-	public static List<ProductResponce> convertLista(List<Product> list) {
-		return list.stream().map(P -> convertProduc(P)).toList();
+	public static List<ProductMinResponce> convertLista(List<Product> list) {
+		return list.stream().map(P -> convertProductMin(P)).toList();
 	}
 }

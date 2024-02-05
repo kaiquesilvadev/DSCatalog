@@ -3,6 +3,9 @@ package com.example.DSCatalog.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +20,9 @@ import org.springframework.web.service.annotation.PutExchange;
 
 import com.example.DSCatalog.domain.dto.conversor.ProductConversor;
 import com.example.DSCatalog.domain.dto.request.ProductRequest;
+import com.example.DSCatalog.domain.dto.responce.ProductMinResponce;
 import com.example.DSCatalog.domain.dto.responce.ProductResponce;
+import com.example.DSCatalog.domain.entities.Product;
 import com.example.DSCatalog.domain.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -33,8 +38,10 @@ public class ProductController {
 	private ProductConversor conversor;
 
 	@GetMapping
-	public List<ProductResponce> lista() {
-		return conversor.converteLista(service.lista());
+	public Page<ProductMinResponce> lista(Pageable pageable) {
+		Page<Product> page = service.lista(pageable);
+		List<ProductMinResponce> pageDto = conversor.converteLista(page.getContent());
+		return new PageImpl<>(pageDto, pageable, page.getTotalElements());
 	}
 
 	@GetMapping("/{id}")

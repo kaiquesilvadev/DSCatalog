@@ -3,8 +3,6 @@ package com.example.DSCatalog.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +19,6 @@ import org.springframework.web.service.annotation.PutExchange;
 import com.example.DSCatalog.domain.dto.conversor.CategoryConversor;
 import com.example.DSCatalog.domain.dto.request.CategoryRequest;
 import com.example.DSCatalog.domain.dto.responce.CategoryResponce;
-import com.example.DSCatalog.domain.entities.Category;
 import com.example.DSCatalog.domain.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -37,10 +34,8 @@ public class CategoryController {
 	private CategoryConversor conversor;
 
 	@GetMapping
-	public Page<CategoryResponce> lista(Pageable pageable) {
-		Page<Category> page = service.lista(pageable);
-		List<CategoryResponce> listDto = conversor.converteLista(page.getContent());
-		return new PageImpl<CategoryResponce>(listDto, pageable, page.getTotalElements());
+	public List<CategoryResponce> lista(Pageable pageable) {
+		return conversor.converteLista(service.lista());
 	}
 
 	@GetMapping("/{id}")
