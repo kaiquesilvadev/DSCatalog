@@ -1,5 +1,7 @@
 package com.example.DSCatalog.domain.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,14 @@ public class ProductService {
 	private ProductConversor conversor;
 
 	@Transactional(readOnly = true)
-	public Page<Product> lista(Pageable pageable) {
-		return repository.findAll(pageable);
+	public Page<Product> lista(Pageable pageable, String categoryIds, String name) {
+		List<Long> categoriesId = new ArrayList<>();
+
+		if (!"0".equals(categoryIds))
+			categoriesId = Arrays.asList(categoryIds.split(",")).stream().map(Long::parseLong).toList();
+		System.out.println(categoriesId);
+		
+		return repository.listaProuct(name , categoriesId, pageable);
 	}
 
 	@Transactional(readOnly = true)
@@ -49,7 +57,8 @@ public class ProductService {
 		Product entidade = buscaPorId(id);
 		entidade.getCategories();
 		conversor.copia(dto, entidade);
-		return repository.save(entidade);	}
+		return repository.save(entidade);
+	}
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void deleta(Long id) {

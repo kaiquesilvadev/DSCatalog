@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.service.annotation.PutExchange;
@@ -38,8 +39,9 @@ public class ProductController {
 	private ProductConversor conversor;
 
 	@GetMapping
-	public Page<ProductMinResponce> lista(Pageable pageable) {
-		Page<Product> page = service.lista(pageable);
+	public Page<ProductMinResponce> lista(Pageable pageable, @RequestParam(defaultValue = "0") String categoryIds,
+			@RequestParam(defaultValue = "") String name) {
+		Page<Product> page = service.lista(pageable, categoryIds, name);
 		List<ProductMinResponce> pageDto = conversor.converteLista(page.getContent());
 		return new PageImpl<>(pageDto, pageable, page.getTotalElements());
 	}
@@ -61,7 +63,7 @@ public class ProductController {
 	public ProductResponce atualizar(@PathVariable Long id, @Valid @RequestBody ProductRequest dto) {
 		return conversor.converteEntidade(service.atualiza(id, dto));
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
