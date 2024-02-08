@@ -16,6 +16,7 @@ import com.example.DSCatalog.domain.dto.conversor.ProductConversor;
 import com.example.DSCatalog.domain.dto.request.ProductRequest;
 import com.example.DSCatalog.domain.entities.Product;
 import com.example.DSCatalog.domain.exception.EntidadeEmUsoException;
+import com.example.DSCatalog.domain.exception.FormatoDeParametroInvalidoException;
 import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
 import com.example.DSCatalog.domain.repositories.ProductRepository;
 
@@ -30,13 +31,18 @@ public class ProductService {
 
 	@Transactional(readOnly = true)
 	public Page<Product> lista(Pageable pageable, String categoryIds, String name) {
-		List<Long> categoriesId = new ArrayList<>();
+		try {
+			List<Long> categoriesId = new ArrayList<>();
 
-		if (!"0".equals(categoryIds))
-			categoriesId = Arrays.asList(categoryIds.split(",")).stream().map(Long::parseLong).toList();
-		System.out.println(categoriesId);
+			if (!"0".equals(categoryIds))
+				categoriesId = Arrays.asList(categoryIds.split(",")).stream().map(Long::parseLong).toList();
+			System.out.println(categoriesId);
+			
+			return repository.listaProuct(name , categoriesId, pageable);
+		} catch (NumberFormatException e) {
+			throw new FormatoDeParametroInvalidoException();
+		}
 		
-		return repository.listaProuct(name , categoriesId, pageable);
 	}
 
 	@Transactional(readOnly = true)

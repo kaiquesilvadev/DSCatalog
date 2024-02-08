@@ -21,6 +21,7 @@ import com.example.DSCatalog.api.exceptionHandler.ApiErro.Field;
 import com.example.DSCatalog.domain.exception.CategoryNaoEncontradaException;
 import com.example.DSCatalog.domain.exception.EntidadeEmUsoException;
 import com.example.DSCatalog.domain.exception.EntidadeNaoEncontradaException;
+import com.example.DSCatalog.domain.exception.FormatoDeParametroInvalidoException;
 import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
 import com.example.DSCatalog.domain.exception.UserNaoEncontradoException;
 
@@ -95,6 +96,16 @@ public class ApiErroHandler extends ResponseEntityExceptionHandler {
 		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.NOT_FOUND.value())
 				.message(ex.getMessage()).erro(PathErro.ENTIDADE_NAO_ENCONTRADA.getTitle())
 				.path(PathErro.ENTIDADE_NAO_ENCONTRADA.getUrl()).build();
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler(FormatoDeParametroInvalidoException.class)
+	public ResponseEntity<?> trataFormatoDeParametroInvalidoException(FormatoDeParametroInvalidoException ex, WebRequest request) {
+
+		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.NOT_FOUND.value())
+				.message(ex.getMessage()).erro(PathErro.PARAMETRO_INVALIDO.getTitle())
+				.path(PathErro.PARAMETRO_INVALIDO.getUrl()).build();
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
