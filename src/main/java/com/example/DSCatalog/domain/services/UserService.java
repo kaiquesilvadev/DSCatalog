@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,9 @@ public class UserService {
 
 	@Autowired
 	private UserConversor conversor;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Transactional(readOnly = true)
 	public List<User> lista() {
@@ -36,8 +40,9 @@ public class UserService {
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public User salvar(UserRequest dto) {
-
 		User entidade = conversor.converteDto(dto);
+		entidade.setPassword(passwordEncoder.encode(dto.getPassword()));
+		entidade.getRoles().add(repository.buscaRole("ROLE_OPERATOR"));
 		return repository.save(entidade);
 	}
 

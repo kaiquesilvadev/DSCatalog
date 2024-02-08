@@ -43,8 +43,7 @@ public class UserController {
 	public UserResponce buscaPorId(@PathVariable Long id) {
 		return conversor.converteEntidade(service.buscaPorId(id));
 	}
-
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public UserResponce salva(@Valid @RequestBody UserRequest dto) {
