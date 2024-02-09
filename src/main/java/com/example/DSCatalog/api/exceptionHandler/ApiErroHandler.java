@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.example.DSCatalog.api.exceptionHandler.ApiErro.Field;
 import com.example.DSCatalog.domain.exception.CategoryNaoEncontradaException;
+import com.example.DSCatalog.domain.exception.EmailException;
 import com.example.DSCatalog.domain.exception.EntidadeEmUsoException;
 import com.example.DSCatalog.domain.exception.EntidadeNaoEncontradaException;
 import com.example.DSCatalog.domain.exception.FormatoDeParametroInvalidoException;
@@ -108,6 +109,16 @@ public class ApiErroHandler extends ResponseEntityExceptionHandler {
 				.path(PathErro.PARAMETRO_INVALIDO.getUrl()).build();
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@ExceptionHandler(EmailException.class)
+	public ResponseEntity<?> trataEmailException(EmailException ex, WebRequest request) {
+
+		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.BAD_REQUEST.value())
+				.message(ex.getMessage()).erro(PathErro.EMAIL_INVALIDO.getTitle())
+				.path(PathErro.EMAIL_INVALIDO.getUrl()).build();
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@Override
