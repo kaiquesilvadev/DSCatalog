@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DSCatalog.domain.dto.request.EmailRequest;
+import com.example.DSCatalog.domain.dto.request.NovaSenhaRequest;
 import com.example.DSCatalog.domain.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -24,5 +25,11 @@ public class EmailAuthController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void criaToken(@Valid @RequestBody EmailRequest emailRequest) {
 		service.criaToken(emailRequest);
+	}
+	
+	@PostMapping("/new-password")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void salvaNovaSenha(@Valid @RequestBody NovaSenhaRequest novaSenhaRequest) {
+		service.salvaNovaSenha(novaSenhaRequest);
 	}
 }

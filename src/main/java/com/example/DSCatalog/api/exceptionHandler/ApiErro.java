@@ -11,6 +11,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiErro {
 
 	 private OffsetDateTime timestamp;

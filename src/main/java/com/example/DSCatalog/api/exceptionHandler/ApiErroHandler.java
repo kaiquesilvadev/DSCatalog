@@ -24,6 +24,7 @@ import com.example.DSCatalog.domain.exception.EntidadeEmUsoException;
 import com.example.DSCatalog.domain.exception.EntidadeNaoEncontradaException;
 import com.example.DSCatalog.domain.exception.FormatoDeParametroInvalidoException;
 import com.example.DSCatalog.domain.exception.ProductNaoEncontradoException;
+import com.example.DSCatalog.domain.exception.TokenInvalidoException;
 import com.example.DSCatalog.domain.exception.UserNaoEncontradoException;
 
 @ControllerAdvice
@@ -119,6 +120,16 @@ public class ApiErroHandler extends ResponseEntityExceptionHandler {
 				.path(PathErro.EMAIL_INVALIDO.getUrl()).build();
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler(TokenInvalidoException.class)
+	public ResponseEntity<?> trataTokenInvalidoException(TokenInvalidoException ex, WebRequest request) {
+
+		ApiErro erro = ApiErro.builder().timestamp(OffsetDateTime.now()).status(HttpStatus.FORBIDDEN.value())
+				.message(ex.getMessage()).erro(PathErro.TOKEN_INVALIDO.getTitle())
+				.path(PathErro.TOKEN_INVALIDO.getUrl()).build();
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
 	}
 	
 	@Override
