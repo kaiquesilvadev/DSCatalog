@@ -9,13 +9,7 @@ import lombok.Setter;
 @Setter
 public class EmailRequest {
 
-	 @NotBlank
-	    @Email
-	    private String to;
-	    
-	    @NotBlank
-	    private String subject;
-	    
-	    @NotBlank
-	    private String body;
+	@Email(message = "O email tem que ser válido ")
+	@NotBlank(message = "email não pode estar em branco")
+	private String email;
 }
